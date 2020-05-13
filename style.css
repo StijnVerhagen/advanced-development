@@ -1,0 +1,19 @@
+body{
+    padding: 35px;
+
+}
+
+.title{
+    padding-bottom: 25px;
+
+}
+
+.title2{
+    padding-top: 55px;
+}
+
+.table a
+{
+    display:block;
+    text-decoration:none;
+}

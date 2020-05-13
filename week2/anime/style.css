@@ -1,0 +1,10 @@
+.square{
+    pointer-events: none;
+    position: relative;
+    width: 200px;
+    height: 200px;
+    background-color: chartreuse;
+    display: inline-block;
+    margin: 4px;
+
+}
