@@ -8,6 +8,4 @@ var animate1 = anime({
     autoplay: false
 })
 
-
-
 document.querySelector('.btnanimate').onclick = animate1.restart;
