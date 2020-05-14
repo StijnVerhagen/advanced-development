@@ -5,57 +5,69 @@
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1" />
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/85/three.js"></script>
     <link rel="stylesheet" href="style.css">
     <title>Three.js demo</title>
   </head>
   <body>
+    <script src="three.js"></script>
+    <script src="OrbitControls.js"></script>
     <script>
-      // create renderer
-      var renderer = new THREE.WebGLRenderer( );
-      renderer.setSize( window.innerWidth, window.innerHeight );
+      
+      let scene, camera, renderer;
 
-      // add to page
-      document.body.appendChild( renderer.domElement );
+      function init() {
+        // scene
+        scene = new THREE.Scene();
 
-      // Scene
-      var scene = new THREE.Scene();
+        // camera
+        camera = new THREE.PerspectiveCamera(55,window.innerWidth/window.innerHeight,45,30000);
+        camera.position.set(-900,-200,-900);
 
-      // Camera
-      var fov = 75;
-      var aspect = window.innerWidth / window.innerHeight;
-      var nearClippingPlane = 0.1;
-      var farClippingPlane = 1000;
-      var camera = new THREE.PerspectiveCamera( fov, aspect, nearClippingPlane, farClippingPlane );
-      camera.position.set( 0, 0, 20 );
+        // renderer
+        renderer = new THREE.WebGLRenderer({antialias:true});
+        renderer.setSize(window.innerWidth,window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-      var geometry = new THREE.TorusKnotBufferGeometry( 5, 1, 100, 16 );
+        // controls
+        let controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-      var material = new THREE.MeshStandardMaterial( {
-          color: 0xb300b3, 
-      } );
+        // controls.addEventListener('change', renderer);
+        controls.minDistance = 500;
+        controls.maxDistance = 1500;
 
-      var mesh = new THREE.Mesh( geometry, material );
-      scene.add( mesh );
+        // images
+        let materialArray = [];
+        let texture_ft = new THREE.TextureLoader().load( '/week2/three/images/humble_ft.jpg');
+        let texture_bk = new THREE.TextureLoader().load( '/week2/three/images/humble_bk.jpg');
+        let texture_up = new THREE.TextureLoader().load( '/week2/three/images/humble_up.jpg');
+        let texture_dn = new THREE.TextureLoader().load( '/week2/three/images/humble_dn.jpg');
+        let texture_rt = new THREE.TextureLoader().load( '/week2/three/images/humble_rt.jpg');
+        let texture_lf = new THREE.TextureLoader().load( '/week2/three/images/humble_lf.jpg');
 
-      var ambientLight = new THREE.AmbientLight( 0x666666, 1.0 );  
-      scene.add( ambientLight );
-
-      var directionalLight = new THREE.DirectionalLight( 0xffffff, 1.0 );
-      directionalLight.position.set( 0, 10, 0 );
-      scene.add( directionalLight );
-
-      function animate() {
-        requestAnimationFrame( animate );
-
-        mesh.rotation.z += 0.01;
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.01;
-
-        renderer.render( scene, camera );
+        // images --> square
+        materialArray.push(new THREE.MeshBasicMaterial( { map: texture_ft }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: texture_bk }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: texture_up }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: texture_dn }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: texture_rt }));
+        materialArray.push(new THREE.MeshBasicMaterial( { map: texture_lf }));
+   
+        for (let i = 0; i < 6; i++){
+          materialArray[i].side = THREE.BackSide;
+        }
+        let skyboxGeo = new THREE.BoxGeometry( 10000, 10000, 10000);
+        let skybox = new THREE.Mesh( skyboxGeo, materialArray );
+        scene.add( skybox );  
+        animate();
       }
-      animate();
+      function animate() {
+        renderer.render(scene,camera);
+        requestAnimationFrame(animate);
+      }
+      init();
+
     </script>
 
 
