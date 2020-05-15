@@ -46,7 +46,22 @@
         // geometry
         var geometry = new THREE.TorusKnotGeometry(100, 30, 100, 100);
         
-        var material = new THREE.MeshLambertMaterial();
+        var material = new THREE.MeshNormalMaterial();
+
+        // mesh (van de THREE.JS website)
+		group = new THREE.Group();
+		for ( var i = 0; i < 1000; i ++ ){
+			var mesh = new THREE.Mesh( geometry, material );
+			mesh.position.x = Math.random() * 2000 - 1000;
+			mesh.position.y = Math.random() * 2000 - 1000;
+			mesh.position.z = Math.random() * 2000 - 1000;
+			mesh.rotation.x = Math.random() * 2 * Math.PI;
+			mesh.rotation.y = Math.random() * 2 * Math.PI;
+			mesh.matrixAutoUpdate = false;
+			mesh.updateMatrix();
+			group.add(mesh);
+        }
+        
         var mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(0, 0, -1000);
 
