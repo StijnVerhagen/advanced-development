@@ -6,49 +6,74 @@
     <title>Three.JS Prototype</title>
 </head>
 <body>
-    <script src="three.js"></script>
+    <script src="/week3/practise/three.js">
+        // main THREE.js library
+    </script>
+    <script src="/week3/prototype/GLTFLoader.js">
+        // maakt het inlezen van 3d model mogelijk
+    </script> 
+
 
     <script>
 
         var scene, camera, renderer;
 
         // renderer
-        renderer = new THREE.WebGLRenderer({antialias: true});
-        renderer.setClearColor(0x000000);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        renderer.setSize(window.innerWidth,window.innerHeight);
-
-        // camera
-        camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 3000);
-
-        // scene
-        scene = new THREE.Scene();
-
+        renderer = new THREE.WebGLRenderer({antialias: true}); // opzetten van een webgl renderer met antialias
+        renderer.setClearColor(0x000000); // zet een clearcolor van zwart als background
+        renderer.setPixelRatio(window.devicePixelRatio); // zet de resolutie van het scherm naar de gebruikers scherm
+        renderer.setSize(window.innerWidth,window.innerHeight); // zet de afmetingen van de render naar de afmetingen van de gebruiker
         document.body.appendChild(renderer.domElement);
 
+
+        // camera
+        camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 3000); // camera instellen met een pov van 35, ratio van het beeldscherm, near, en far
+
+        // scene
+        scene = new THREE.Scene(); // init scene
+
         // lighting
-        var light = new THREE.AmbientLight(0xffffff, 0.5);
+        var light = new THREE.AmbientLight(0xffffff, 1.5); // init lighting, kleur wit, 0.5 sterkte
         scene.add(light);
 
-        var light1 = new THREE.PointLight(0xffffff, 0.5);
+        var light1 = new THREE.PointLight(0xffffff, 1.5);
         scene.add(light1);
 
         // geometry
 
-        // mesh
+        // loader
+        var loader = new THREE.GLTFLoader();
+        loader.load('/week3/prototype/horsenew.gltf', function (gltf) {
+            var model = gltf.scene;
+            var mixer = new THREE.AnimationMixer(model);
+            var clip1 = gltf.animations[0];
+            var action1 = mixer.clipAction(clip1);
+            action1.play();
+        });
+
 
         // animation script?
 
 
+        render();
 
-        requestAnimationFrame(render);
+        var delta = 0;
+        var prevTime = Date.now();
 
-        function render(){
-            mesh.rotation.x += 0.01;
-            mesh.rotation.y += 0.01;
+        function render() {
 
-            renderer.render(scene, camera);
-            requestAnimationFrame(render);
+            var dt = clock.getDelta()
+            mixer.update(dt);
+            delta += 0.1;
+
+            if (mesh) {
+        
+                mesh.rotation.y += 0.01;
+            }
+
+    	    renderer.render(scene, camera);
+
+    	    requestAnimationFrame(render);
         }
     </script>
     
