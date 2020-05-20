@@ -12,69 +12,103 @@
     <script src="/week3/prototype/GLTFLoader.js">
         // maakt het inlezen van 3d model mogelijk
     </script> 
+    <script src="/week3/prototype/OrbitControls.js">
+        // maakt het ronddraaien van de animatie mogelijk
+    </script>
 
 
     <script>
 
-        var scene, camera, renderer;
+        var mixer, camera, scene, renderer, clock;  // variabelen
 
-        // renderer
-        renderer = new THREE.WebGLRenderer({antialias: true}); // opzetten van een webgl renderer met antialias
-        renderer.setClearColor(0x000000); // zet een clearcolor van zwart als background
-        renderer.setPixelRatio(window.devicePixelRatio); // zet de resolutie van het scherm naar de gebruikers scherm
-        renderer.setSize(window.innerWidth,window.innerHeight); // zet de afmetingen van de render naar de afmetingen van de gebruiker
-        document.body.appendChild(renderer.domElement);
+        init();     // functie van het inladen en vaststellen van parameters
+        animate();  // functie die de animatie loopt op basis van de tijd
 
+        function init() {        
 
-        // camera
-        camera = new THREE.PerspectiveCamera(35, window.innerWidth / window.innerHeight, 0.1, 3000); // camera instellen met een pov van 35, ratio van het beeldscherm, near, en far
+            /// CAMERA instellen
+            // pov van 45, grootte op basis van gebruikersscherm, near en far van 1-1000
+            camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 1, 500);
+            camera.position.set(20, 5, 25);
+            
+            /// SCENE
+            scene = new THREE.Scene();
+            // background color van scene (lightblauw)
+            scene.background = new THREE.Color(0xADF0ED);
 
-        // scene
-        scene = new THREE.Scene(); // init scene
-
-        // lighting
-        var light = new THREE.AmbientLight(0xffffff, 1.5); // init lighting, kleur wit, 0.5 sterkte
-        scene.add(light);
-
-        var light1 = new THREE.PointLight(0xffffff, 1.5);
-        scene.add(light1);
-
-        // geometry
-
-        // loader
-        var loader = new THREE.GLTFLoader();
-        loader.load('/week3/prototype/horsenew.gltf', function (gltf) {
-            var model = gltf.scene;
-            var mixer = new THREE.AnimationMixer(model);
-            var clip1 = gltf.animations[0];
-            var action1 = mixer.clipAction(clip1);
-            action1.play();
-        });
-
-
-        // animation script?
-
-
-        render();
-
-        var delta = 0;
-        var prevTime = Date.now();
-
-        function render() {
-
-            var dt = clock.getDelta()
-            mixer.update(dt);
-            delta += 0.1;
-
-            if (mesh) {
+            /// create animation inside containerdiv
+            var container = document.createElement('div');
+            document.body.appendChild(container);
         
-                mesh.rotation.y += 0.01;
+            /// clock voor timen van animatie
+            clock = new THREE.Clock();
+                
+            /// LIGHTS
+            // basic light die direct van bovenaf komt
+            var light = new THREE.HemisphereLight(0xffffff, 0x444444, 0.8);
+            light.position.set(0, 250, 0);
+            scene.add(light);
+            // light die van een richting afkomt, kan ook schaduwen creeëren
+            light = new THREE.DirectionalLight(0xffffff, 0.8);
+            light.position.set(20, 30, 15);
+            scene.add(light);
+    
+            /// LOADER
+            var loader = new THREE.GLTFLoader();
+            // laad de gltf file in en voegt het toe aan de scene
+            // geeft als parameter de locatie van de animatie mee + een functie die de animatie toevoegd aan de scene        
+            loader.load('/week3/prototype/horsenew.gltf', function (gltf){
+                
+                scene.add(gltf.scene);
+                /// MIXER
+                mixer = new THREE.AnimationMixer(gltf.scene);
+                // array van de animatieclips worden afgespeeld
+                mixer.clipAction(gltf.animations[0]).play();
+            
+            } );
+        
+            /// RENDERER        
+            renderer = new THREE.WebGLRenderer();
+            // past de qualiteit aan aan de gebruiker
+            renderer.setPixelRatio(window.devicePixelRatio);
+            // past de afmetingen aan aan die van de gebruiker
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            // zet de renderer binnen de body
+            container.appendChild(renderer.domElement);
+        
+            /// ORBITCONTROLS
+            var controls = new THREE.OrbitControls(camera, renderer.domElement);
+            // schakelt het 'rondwandelen' d.m.v. de rechtermuisknop uit
+            controls.enablePan = false;
+            // hoe dichtbij/verweg de camera mag komen
+            controls.minDistance = 5;
+            controls.maxDistance = 50;
+        
+        }
+
+        /// ANIMATE
+        function animate() {
+
+            requestAnimationFrame(animate);
+
+            // speelt de animatie constant af op basis van een clock
+            if (mixer) {
+
+                mixer.update(clock.getDelta());
+
             }
 
-    	    renderer.render(scene, camera);
-
-    	    requestAnimationFrame(render);
+            render();        
         }
+
+        /// RENDER
+        function render() {
+        
+            renderer.render(scene, camera);        
+        }
+
+
+        
     </script>
     
 </body>
