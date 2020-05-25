@@ -18,7 +18,9 @@
     </script>
 
     <div style="text-align: center; z-index: 265;">
-        <button onclick="changeModel()" style="margin: 20px; z-index: 265;" type="button" class="btn btn-dark">Change animal</button>
+        <button onclick="changeHorse()" style="margin: 20px; z-index: 265;" type="button" class="btn btn-dark">Horse</button>
+        <button onclick="changeChicken()" style="margin: 20px; z-index: 265;" type="button" class="btn btn-dark">Chicken</button>
+
     </div>
 
 
@@ -27,33 +29,39 @@
         var mixer, camera, scene, renderer, clock, model, count;  // variabelen
 
         var btn = document.querySelector('button');
-
-        model = "/week3/prototype/horsenew.gltf"
+ 
         count = 1;
 
+        function changeHorse(){
 
-        function changeModel(){
-
-            console.log("Change Animal");
+            console.log("Change Horse");
             
-            if(count == 1){
-                model = "/week3/prototype/chicken.gltf";
-                count = 0;
-            }
-            else if(count == 0){
-                model = "/week3/prototype/horsenew.gltf";
-                count = 1;
-            }
+            model = "/week3/prototype/horsenew.gltf";
 
-            return model;
-            init();
+            
+            init(model);
+            animate();
+        }
+
+        function changeChicken(){
+
+            console.log("Change Chicken");
+
+            model = "/week3/prototype/chicken.gltf";
+
+            
+            init(model);
+            animate();
         }
 
         init();        // functie van het inladen en vaststellen van parameters
         animate();                  // functie die de animatie loopt op basis van de tijd
 
-        function init() {        
+        function init(model) {        
 
+            if(model == null){
+                model = "/week3/prototype/horsenew.gltf"
+            }
 
             /// CAMERA instellen
             // pov van 45, grootte op basis van gebruikersscherm, near en far van 1-1000
