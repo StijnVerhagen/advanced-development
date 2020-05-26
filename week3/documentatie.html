@@ -12,7 +12,7 @@
   <body>
       
     <div class="container-sm">
-        <h1 class="title">Documentatie Prototype</h1>
+        <h1 class="title">Documentatie Prototype Smart Hub</h1>
         <p>Opdracht: Maak een prototype van één gekozen library. <br> <br>
             Tussen <a href="https://github.com/stijnvfhict/advanced-development/tree/master/week3/prototype">de code van het prototype</a> staan overal notities die de code stap voor stap uitleggen.
         </p>
@@ -21,6 +21,7 @@
     <div class="container-lg">
         <h4 class="title2">Stap 1 - Extra oefenen </h4>
         <p>
+            <a href="https://github.com/stijnvfhict/advanced-development/commit/ba1f6929625d638688c6d4eba02015ce74a5ca50">Github</a> <br>
             Omdat ik nog niet eerder gewerkt heb met THREE.JS vóór het maken van deze specialisatie. 
             Besloot ik om eerst nog een extra oefen opdracht te maken om de basics nog een keer te herhalen. 
             Ik heb hier een basic scene opgezet waarin een witte vierkante ‘cube’ te zien is. 
@@ -33,9 +34,11 @@
         </video>
         <img style="float: right; width:400px; height:auto;" src="/week3/img/ScreenshotBasicSetup.jpg" alt="This image is not available">
     </div>
+
     <div class="container-lg">
         <h4 class="title2">Stap 2 - Experimenteren </h4>
         <p>
+            <a href="https://github.com/stijnvfhict/advanced-development/commit/a1ac97f542f3d3c9ab5747211dff2c372e1ad293">Github</a> <br>
             Na het maken van een cube heb ik een aantal andere variaties uitgeprobeerd. 
             Een voorbeeld hiervan is de TorusKnotGeometry. <br>
             Deze legt als het ware een knoop.
@@ -46,25 +49,89 @@
         </video>
         <img style="float: right; width:400px; height:auto;" src="/week3/img/ColorfulMesh.jpg" alt="This image is not available">
     </div>
+
     <div class="container-lg">
         <h4 class="title2">Stap 3 - Animeren </h4>
         <p>
+            <a href="https://github.com/stijnvfhict/advanced-development/commit/1d9c249799e19fc835d37fccfc85ca035a673ba8">Github</a> <br>
             Hierna ben ik begonnen aan het prototype. 
             Ik heb online een model gevonden van een low poly paard samen met een model van een strand waar ik de animatie van het paard in kan zetten. 
             Het paard heb ik zelf geanimeerd in blender. <br>
             <a href="https://www.blendswap.com/blend/14671">Paard model</a> <br>
             <a href="https://www.blendswap.com/blend/8705">Strand model</a> (uiteindelijk niet gebruikt)
         </p>
-        <img style="float: left; width:400px; height:auto;" src="/week3/img/Paard.jpg" alt="This image is not available">
+        <p>
+            Ik kwam er achter dat doordat ik te snel wilde gaan met het animeren en het instellen van de Scene, ik vastliep. 
+            Ik heb hulp gevraagd aan een van mijn groepsleden en ben overnieuw begonnen. 
+            Deze keer heb ik alleen de animatie van het paard gemaakt zonder de scene. <br>
+            Nu dat het paard geanimeerd is kan ik beginnen aan het toevoegen van de animatie aan THREE.JS zodat hij weer te geven is.
+        </p>
+        <video width="500" height="300" autoplay loop>
+            <source src="/week3/img/HorseAnimation.mp4" type="video/mp4">
+             Your browser does not support the video tag.
+        </video>        
         <img style="float: right; width:500px; height:auto;" src="/week3/img/PaardSkin.png" alt="This image is not available">
     </div>
-
-    <div class="navbar">
-
-    </div>
+    <br>
     
+    <div class="container-lg">
+        <h4 class="title2">Stap 4 - Implementeren </h4>
+        <p>
+            <a href="https://github.com/stijnvfhict/advanced-development/commit/9c9350a90476fda7a97203d74d24b86b2788eb96">Github</a> <br>
+            Ik heb als eerste een standaard scene opgezet. 
+            Deze heb ik al tijdens mijn oefen opdracht gemaakt en kon ik nu mooi hergebruiken. 
+            Voordat ik de animatie in THREE.JS wilde zetten heb ik hem eerst in een <a href="https://gltf-viewer.donmccurdy.com/">gLTF Viewer</a> gezet om te kijken of hij werkt naar behoren (gLTF is het bestandsformaat waarin de animatie word geexporteerd). 
+            <br> <br>
+            Deze werkte naar behoren en ik ben begonnen aan THREE.JS.
+            Ik kreeg een aantal problemen met het weergeven van de animatie van het paard. 
+            Er alleen de skin van het model was te zien en de bone structure leek verdwenen. 
+            Het was alleen een losstaande afbeelding en geen animatie. 
+            Ik heb een beetje onderzocht hoe ik dit op kon lossen en heb <a href="https://discourse.threejs.org/t/how-to-load-animations-and-skeleton-correctly-gltfloader/4066">deze discussion</a> gebruikt als oplossing. 
+            <br> <br>
+            Na wat getweak aan mijn eigen code en het toevoegen van de correcte GLTFLoader(); ben ik er achter gekomen dat ik een ‘mixer’ miste, deze speelt de animatie af. 
+            Wat ik voorheen te zien kreeg was alleen een paard met zijn poten gebroken (zie afbeelding hieronder). 
+            <br>
+            Verder heb ik ook nog controls toegevoegd met behulp van OrbitControls(); (die ik in week 2 tijdens het maken van de ShortList ook heb gebruikt).
+            <br> 
+            Hierna heb ik het visueel aantrekkelijk gemaakt door kleuren toe te voegen aan de achtergrond. 
+        </p>
+        <img style="float: right; width:500px; height:auto;" src="/week3/img/BrokenLegs.jpg" alt="This image is not available">
+    </div>
+    <br>
 
+    <div class="container-lg">
+        <h4 class="title2">Stap 5 - Verder uitwerken </h4>
+        <p>
+            <a href="https://github.com/stijnvfhict/advanced-development/commit/c5d8cb86498d7451341308ea3defa0e26e132d4b">Github</a> <br>
+            Om deze POC nog verder uit te werken richting ons project wilde ik eigenlijk nog meer dieren toevoegen. 
+            Uiteindelijk is dat binnen ons product ook mogelijk.  
+            Ik ben begonnen met <a href="https://www.blendswap.com/blend/13807">een animatie van een kip</a> die ik heb gevonden. 
+            Deze kip zelf animeren had me teveel tijd gekost.
+            <br> <br>
+            Ik ben begonnen met een functie te schrijven die van model switcht wanneer er op de button geklikt word. 
+            Hij veranderd dan waar het model vandaan moet komen.
+            Ben hierbij ook een probleem tegengekomen, hij veranderd niet. 
+            Ik denk zelf dat het te maken heeft met het updaten van de render. 
+            <br> <br>
+            Ondertussen ben ik een stap verder gekomen. Ook aangegeven in <a href="https://github.com/stijnvfhict/advanced-development/commit/25b6a1a91335017fa3c3ec93007aa0793c675282">Git</a>. 
+            Op dit moment start hij een nieuwe Scene onder de al bestaande Scene op de pagina waardoor de Scenes dus gestacked worden onder elkaar binnen de pagina.  
+            <br> <br>
 
+            <img style="float: right; width:500px; height:auto;" src="/week3/img/MeerdereAnimations1Scene.jpg" alt="This image is not available">
+
+            Na veel rond gesnuffel en geprobeer heb ik voortgang geboekt.
+            Het is me gelukt om meerdere animations in 1 scene te zetten (zie afbeelding rechts).
+            Nu proberen om de vorige animatie uit de scene te zetten voordat de nieuwe wordt toegevoegd. 
+            <br> <br>
+            Ook is inmiddels de laatste stap gezet. 
+            Het probleem van het laden van meerdere objecten binnen één scene is verholpen. 
+            De Init(); ‘refresht’ nu als het waren elke keer wanneer er op een knop word gedrukt. 
+            Het pad van de gekozen animatie word meegestuurd als parameter.
+            <br> <br>
+            De laatste commit is <a href="https://www.blendswap.com/blend/13807">hier</a> te vinden.
+        </p>
+    </div>
+    <br>
 
 
 

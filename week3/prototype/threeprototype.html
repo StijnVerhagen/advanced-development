@@ -4,26 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
     <title>Three.JS Prototype</title>
 </head>
 <body>
 
-    <script src="/week3/practise/three.js">
+    <script src="/threeLibraries/three.js">
         // main THREE.js library
     </script>
-    <script src="/week3/prototype/GLTFLoader.js">
+    <script src="/threeLibraries/GLTFLoader.js">
         // maakt het inlezen van 3d model mogelijk
     </script> 
-    <script src="/week3/prototype/OrbitControls.js">
+    <script src="/threeLibraries/OrbitControls.js">
         // maakt het ronddraaien van de animatie mogelijk
     </script>
 
-    <div style="text-align: center; z-index: 265; height: 75px;">
-        <button id="btnHorse" style="margin: 20px; z-index: 265;" type="button" class="btn btn-dark">Horse</button>
-        <button id="btnChicken" style="margin: 20px; z-index: 265;" type="button" class="btn btn-dark">Chicken</button>
+    <div class="header">
+        <button id="btnHorse" type="button" class="btn btnposition btn-dark">Horse</button>
+        <button id="btnChicken" type="button" class="btn btnposition btn-dark">Chicken</button>
     </div>
 
-    <div id="3dcanvas">
+    <div id="3dcanvas" class="canvas">
+        <!-- Container div voor de scene -->
     </div>
 
     <script>
@@ -45,9 +47,9 @@
             // background color van scene (lightblauw)
             scene.background = new THREE.Color(0xADF0ED);
 
-            /// create animation inside containerdiv
-            var container = document.getElementById('3dcanvas');
-            container.innerHTML = '';
+            /// containerdiv word vastgesteld
+            var canvas = document.getElementById('3dcanvas');
+            canvas.innerHTML = '';
         
             /// clock voor timen van animatie
             clock = new THREE.Clock();
@@ -67,9 +69,9 @@
             // past de qualiteit aan aan de gebruiker
             renderer.setPixelRatio(window.devicePixelRatio);
             // past de afmetingen aan aan die van de gebruiker
-            renderer.setSize(window.innerWidth, window.innerHeight-150);
-            // zet de renderer binnen de body
-            container.appendChild(renderer.domElement);
+            renderer.setSize(window.innerWidth-125, window.innerHeight-150);
+            // zet de renderer binnen de div
+            canvas.appendChild(renderer.domElement);
         
             /// ORBITCONTROLS
             var controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -121,8 +123,7 @@
         
 
         // laad de initieele gltf file in en voegt het toe aan de scene
-        // geeft als parameter de locatie van de animatie mee + een functie die de animatie toevoegd aan de scene 
-
+        // geeft als parameter de locatie van de animatie mee
         init(gltfPathChicken);
         animate();  
       
