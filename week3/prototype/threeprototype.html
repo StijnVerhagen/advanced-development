@@ -84,65 +84,71 @@
             /// LOADER
             var loader = new THREE.GLTFLoader();
 
+            loader.load("/week3/prototype/chicken.gltf", function (gltf){
+            
+                scene.add(gltf.scene);
+                /// MIXER
+                mixer = new THREE.AnimationMixer(gltf.scene);
+                // array van de animatieclips worden afgespeeld
+                mixer.clipAction(gltf.animations[0]).play();
+                console.log("InitLoad");
+
+        
+            });
+
         // }
 
         animate();  
 
-        function loadAnimation(filename, onLoaded){
 
-            loader.load(filename, function(gltf){
-                var foundAnimation = '';
-                gltf.scene.traverse(function(node){
-                    if(node.isAnimation){
-                        foundAnimation = node;
-                        foundAnimation.material.map.anisotropy = maxAnisotropy;
-                    }
-                });
-                if(foundAnimation){
-                    onLoaded(foundAnimation);
-                }
-            })
-        }
-
-        loadAnimation("/week3/prototype/horsenew.gltf", function(nextAnimation){
+        
 
             document.getElementById("btnChicken").addEventListener("click", function(){
 
                 // Als er al een animatie is, verwijderen
-                if(currentHorse){
-                    scene.remove(currentHorse);
-                }
-                scene.add(currentChicken);
-                currentHorse = nextAnimation;
+                scene.remove(currentHorse);
+                
+                loader.load("/week3/prototype/chicken.gltf", function (gltf){
+            
+                    scene.add(gltf.scene);
+                    /// MIXER
+                    mixer = new THREE.AnimationMixer(gltf.scene);
+                    // array van de animatieclips worden afgespeeld
+                    mixer.clipAction(gltf.animations[0]).play();
+                    console.log("Chicken");
+                    
+    
+                });
+
             })
-        })
+        
 
-        loadAnimation("/week3/prototype/chicken.gltf", function(nextAnimation){
-
+        
+                
             document.getElementById("btnHorse").addEventListener("click", function(){
             
                 // Als er al een animatie is, verwijderen
-                if(currentChicken){
-                    scene.remove(currentChicken);
-                }
-                scene.add(currentHorse);
-                currentHorse = nextAnimation;
+                scene.remove(currentChicken);
+
+                loader.load("/week3/prototype/horsenew.gltf", function (gltf){
+            
+                    scene.add(gltf.scene);
+                    /// MIXER
+                    mixer = new THREE.AnimationMixer(gltf.scene);
+                    // array van de animatieclips worden afgespeeld
+                    mixer.clipAction(gltf.animations[0]).play();
+                    console.log("Horse");
+
+                });
+        
             })
-        })
+        
 
 
 
         // laad de gltf file in en voegt het toe aan de scene
         // geeft als parameter de locatie van de animatie mee + een functie die de animatie toevoegd aan de scene        
-        // loader.load("/week3/prototype/chicken.gltf", function (gltf){
-        //     
-        //     scene.add(gltf.scene);
-        //     /// MIXER
-        //     mixer = new THREE.AnimationMixer(gltf.scene);
-        //     // array van de animatieclips worden afgespeeld
-        //     mixer.clipAction(gltf.animations[0]).play();
-        // 
-        // } );
+        
 
 
 
