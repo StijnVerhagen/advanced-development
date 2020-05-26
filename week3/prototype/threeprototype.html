@@ -7,6 +7,7 @@
     <title>Three.JS Prototype</title>
 </head>
 <body>
+
     <script src="/week3/practise/three.js">
         // main THREE.js library
     </script>
@@ -17,25 +18,22 @@
         // maakt het ronddraaien van de animatie mogelijk
     </script>
 
-    <div style="text-align: center; z-index: 265;">
+    <div style="text-align: center; z-index: 265; height: 75px;">
         <button id="btnHorse" style="margin: 20px; z-index: 265;" type="button" class="btn btn-dark">Horse</button>
         <button id="btnChicken" style="margin: 20px; z-index: 265;" type="button" class="btn btn-dark">Chicken</button>
-
     </div>
 
+    <div id="3dcanvas">
+    </div>
 
     <script>
 
         var mixer, camera, scene, renderer, clock;  // variabelen
 
-        var currentChicken = "/week3/prototype/chicken.gltf";
-        var currentHorse = "/week3/prototype/horsenew.gltf";
+        var gltfPathChicken = "/week3/prototype/chicken.gltf";
+        var gltfPathHorse = "/week3/prototype/horsenew.gltf";
 
-
-        // init();                     // functie van het inladen en vaststellen van parameters
-                        // functie die de animatie loopt op basis van de tijd
-
-        // function init() {     
+        function init(gltfPath) {     
 
             /// CAMERA instellen
             // pov van 45, grootte op basis van gebruikersscherm, near en far van 1-1000
@@ -48,8 +46,8 @@
             scene.background = new THREE.Color(0xADF0ED);
 
             /// create animation inside containerdiv
-            var container = document.createElement('div');
-            document.body.appendChild(container);
+            var container = document.getElementById('3dcanvas');
+            container.innerHTML = '';
         
             /// clock voor timen van animatie
             clock = new THREE.Clock();
@@ -69,7 +67,7 @@
             // past de qualiteit aan aan de gebruiker
             renderer.setPixelRatio(window.devicePixelRatio);
             // past de afmetingen aan aan die van de gebruiker
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(window.innerWidth, window.innerHeight-150);
             // zet de renderer binnen de body
             container.appendChild(renderer.domElement);
         
@@ -82,75 +80,18 @@
             controls.maxDistance = 50;
 
             /// LOADER
-            var loader = new THREE.GLTFLoader();
+            console.log('LOADING: ' + gltfPath);
 
-            loader.load("/week3/prototype/chicken.gltf", function (gltf){
+            var loader = new THREE.GLTFLoader();
+            loader.load(gltfPath, function (gltf){
             
                 scene.add(gltf.scene);
                 /// MIXER
                 mixer = new THREE.AnimationMixer(gltf.scene);
                 // array van de animatieclips worden afgespeeld
                 mixer.clipAction(gltf.animations[0]).play();
-                console.log("InitLoad");
-
-        
             });
-
-        // }
-
-        animate();  
-
-
-        
-
-            document.getElementById("btnChicken").addEventListener("click", function(){
-
-                // Als er al een animatie is, verwijderen
-                scene.remove(currentHorse);
-                
-                loader.load("/week3/prototype/chicken.gltf", function (gltf){
-            
-                    scene.add(gltf.scene);
-                    /// MIXER
-                    mixer = new THREE.AnimationMixer(gltf.scene);
-                    // array van de animatieclips worden afgespeeld
-                    mixer.clipAction(gltf.animations[0]).play();
-                    console.log("Chicken");
-                    
-    
-                });
-
-            })
-        
-
-        
-                
-            document.getElementById("btnHorse").addEventListener("click", function(){
-            
-                // Als er al een animatie is, verwijderen
-                scene.remove(currentChicken);
-
-                loader.load("/week3/prototype/horsenew.gltf", function (gltf){
-            
-                    scene.add(gltf.scene);
-                    /// MIXER
-                    mixer = new THREE.AnimationMixer(gltf.scene);
-                    // array van de animatieclips worden afgespeeld
-                    mixer.clipAction(gltf.animations[0]).play();
-                    console.log("Horse");
-
-                });
-        
-            })
-        
-
-
-
-        // laad de gltf file in en voegt het toe aan de scene
-        // geeft als parameter de locatie van de animatie mee + een functie die de animatie toevoegd aan de scene        
-        
-
-
+        }
 
         /// ANIMATE
         function animate() {
@@ -159,18 +100,32 @@
 
             // speelt de animatie constant af op basis van een clock
             if (mixer) {
-
                 mixer.update(clock.getDelta());
-
             }
 
             /// RENDER
             renderer.render(scene, camera);       
         }
+   
+        document.getElementById("btnChicken").addEventListener("click", function(){
 
-
-
+            init(gltfPathChicken);
+            animate();
+        });
+                
+        document.getElementById("btnHorse").addEventListener("click", function(){
         
+            init(gltfPathHorse);
+            animate(); 
+        });
+        
+
+        // laad de initieele gltf file in en voegt het toe aan de scene
+        // geeft als parameter de locatie van de animatie mee + een functie die de animatie toevoegd aan de scene 
+
+        init(gltfPathChicken);
+        animate();  
+      
     </script>
     
 </body>
